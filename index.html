@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ピカガブ">
+<meta name="theme-color" content="#0e0e11">
+<title>ピカガブ</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎬%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#0e0e11;--c1:#18181d;--c2:#23232b;--tx:#f3f3f6;--mu:#9b9bab;--bd:#2c2c36;--red:#ff3b47;--iw:#4da3ff;--pk:#ffc933;--ok:#2fcf7f;--wa:#ffa51f;--ba:#7d7d8c}
+@media(prefers-color-scheme:light){:root{--bg:#f3f3f7;--c1:#fff;--c2:#ececf2;--tx:#17171c;--mu:#6b6b7b;--bd:#e0e0e8}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,"Hiragino Sans",system-ui,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+#hd{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)}
+.ht{flex:1;font-size:19px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bk{font-size:28px;line-height:1;padding:0 8px 4px 0}
+.me{font-size:13px;font-weight:700;padding:7px 12px;border-radius:99px;border:2px solid}
+.me.iw{color:var(--iw)}.me.pk{color:var(--pk)}
+#app{padding:12px 14px;max-width:640px;margin:0 auto}
+h2{font-size:13px;color:var(--mu);margin:20px 2px 8px}
+.card{background:var(--c1);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.big{font-weight:700;font-size:16px}.mu{color:var(--mu);font-size:12.5px}.c{text-align:center}
+.pre{white-space:pre-wrap;word-break:break-word;margin-top:4px}
+.clip{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.who{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:99px;border:1px solid;white-space:nowrap}
+.who.iw{color:var(--iw)}.who.pk{color:var(--pk)}.who.both{color:var(--ok)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.chip{font-size:11.5px;padding:2px 8px;border-radius:99px;background:var(--c2);color:var(--mu)}
+.chip.late{background:#ff3b4733;color:var(--red)}.chip.today{background:#ffa51f33;color:var(--wa)}
+.chip.ph{color:var(--red)}.chip.pm{color:var(--wa)}
+.chip.b0{background:var(--ok);color:#06210f;font-weight:700}.chip.b1{background:var(--wa);color:#2b1900;font-weight:700}.chip.b2{background:var(--ba);color:#fff;font-weight:700}
+.task{display:flex;gap:12px;align-items:flex-start}
+.chk{flex:none;width:32px;height:32px;border-radius:50%;border:2px solid var(--mu);color:#fff;font-weight:700}
+.done .chk{background:var(--ok);border-color:var(--ok)}.done .tt{text-decoration:line-through;opacity:.5}
+.tb{flex:1;min-width:0}.tt{font-weight:600}
+.bar{height:10px;background:var(--c2);border-radius:99px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ff8a3d);border-radius:99px;box-shadow:0 0 10px #ff3b4788}
+.subs{display:flex;gap:6px;overflow-x:auto;margin:4px 0 12px;padding-bottom:4px}
+.subs button{flex:none;padding:8px 14px;border-radius:99px;background:var(--c1);border:1px solid var(--bd);font-size:13.5px}
+.subs .on{background:var(--red);border-color:var(--red);color:#fff}
+.sts{display:flex;gap:6px;margin-top:10px}
+.st{flex:1;padding:9px 0;border-radius:10px;background:var(--c2);font-size:13px;color:var(--mu)}
+.st.on.s0{background:var(--ok);color:#06210f;font-weight:700}.st.on.s1{background:var(--wa);color:#2b1900;font-weight:700}.st.on.s2{background:var(--ba);color:#fff;font-weight:700}
+.adopt{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}.star{color:var(--ok);font-weight:700;font-size:12.5px}
+.s2c{opacity:.55}
+.step{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;background:var(--c1);border:1px solid var(--bd);border-radius:14px}
+.step .ck{flex:none;width:28px;height:28px;border-radius:50%;background:var(--c2);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--mu)}
+.step.on .ck{background:var(--ok);color:#fff}.step.on{opacity:.65}
+.sm{font-size:12.5px;padding:6px 12px;border-radius:99px;background:var(--c2)}
+.b{padding:12px 16px;border-radius:12px;background:var(--c2);font-weight:600}.b.pri{background:var(--red);color:#fff;flex:1}.b.dl{color:var(--red)}
+.ln{display:flex;margin:8px 0}.ln.r{justify-content:flex-end}
+.bub{max-width:84%;padding:9px 12px;border-radius:16px;white-space:pre-wrap;word-break:break-word}
+.bub small{display:block;font-size:11px;font-weight:700;margin-bottom:2px}
+.ln.l .bub{background:#4da3ff26;border:1px solid var(--iw);border-bottom-left-radius:4px}.ln.l small{color:var(--iw)}
+.ln.r .bub{background:#ffc93326;border:1px solid var(--pk);border-bottom-right-radius:4px}.ln.r small{color:var(--pk)}
+#comp{position:fixed;left:0;right:0;bottom:calc(58px + env(safe-area-inset-bottom));background:var(--c1);border-top:1px solid var(--bd);padding:8px;z-index:5}
+#comp:empty{display:none}
+#comp div{display:flex;gap:8px;align-items:flex-end;max-width:640px;margin:auto}
+#comp textarea{flex:1;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px;max-height:120px}
+.spk{padding:10px 12px;border-radius:12px;font-weight:700;border:2px solid}.spk.iw{color:var(--iw)}.spk.pk{color:var(--pk)}
+.snd{padding:11px 14px;border-radius:12px;background:var(--red);color:#fff;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.stat{background:var(--c2);border-radius:12px;padding:10px;text-align:center}.stat b{display:block;font-size:20px}.stat span{font-size:11.5px;color:var(--mu)}
+.blk{border-left:4px solid var(--c2);padding:2px 0 2px 10px;margin:10px 0}.blk small{color:var(--mu);font-weight:700}
+.blk.g{border-color:var(--ok)}.blk.n{border-color:var(--red)}.blk.w{border-color:var(--wa)}
+.th img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;margin-bottom:8px;display:block}
+.bs small{color:var(--mu);display:block;margin-top:6px}
+.empty{color:var(--mu);text-align:center;padding:16px 8px;font-size:13.5px;border:1px dashed var(--bd);border-radius:14px;margin-bottom:10px}
+.lg{padding:5px 0;font-size:13.5px}
+#nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--c1);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+#nav button{flex:1;padding:8px 0 7px;font-size:11px;color:var(--mu)}#nav button span{display:block;font-size:21px}#nav .on{color:var(--red);font-weight:700}
+#fab{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--red);color:#fff;font-size:32px;box-shadow:0 6px 20px #ff3b4766;z-index:6}
+#sheet{position:fixed;inset:0;background:#000a;z-index:20;display:none;align-items:flex-end}#sheet.on{display:flex}
+.sh{width:100%;max-height:92vh;background:var(--c1);border-radius:20px 20px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+.shh{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--bd)}.x{font-size:20px;padding:0 6px}
+.shb{overflow:auto;padding:4px 16px 12px}.shb label{display:block;font-size:12.5px;color:var(--mu);margin-top:12px}
+.shb input,.shb textarea,.shb select{display:block;width:100%;margin-top:4px;padding:11px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
+.shb img{width:100%;border-radius:10px;margin-top:8px}
+.shf{display:flex;gap:8px;padding:10px 16px}
+#login{position:fixed;inset:0;background:var(--bg);z-index:30;display:flex;align-items:center;justify-content:center;padding:24px}
+#login form{width:100%;max-width:340px;display:grid;gap:12px;text-align:center}
+#login h1{margin:0;font-size:30px}#login input{padding:13px;border-radius:12px;border:1px solid var(--bd);background:var(--c1);color:var(--tx);font-size:16px}
+#le{color:var(--red);font-size:13px;min-height:18px}
+</style></head>
+<body>
+<div id="hd"></div><div id="app"></div><div id="comp"></div>
+<button id="fab" data-a="fab" hidden>＋</button>
+<nav id="nav"><button data-a="tab" data-v="home"><span>🏠</span>ホーム</button><button data-a="tab" data-v="tasks"><span>✅</span>やること</button><button data-a="tab" data-v="ideas"><span>💡</span>企画</button><button data-a="tab" data-v="videos"><span>🎬</span>動画</button></nav>
+<div id="sheet"></div>
+<div id="login"><form id="lf"><h1>🎬 ピカガブ</h1><input id="em" type="email" placeholder="メールアドレス" autocomplete="username"><input id="pw" type="password" placeholder="パスワード" autocomplete="current-password"><button class="b pri">ログイン</button><div id="le"></div></form></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ▼▼ ここにFirebaseの設定を貼る ▼▼ */
+const CFG={apiKey:"",authDomain:"",projectId:"",appId:""};
+/* ▲▲ ここまで ▲▲ */
+
+const app=initializeApp(CFG),auth=getAuth(app),db=getFirestore(app);
+const P=["イワガブ","ピカトモ"],ST=["採用","保留","ボツ"],COLS=["tasks","ideas","videos","titles","thumbs","boosts","lines","logs"];
+const S={tab:"home",vid:null,sub:"prog",tf:"open",fi:"all",me:localStorage.me||P[0],sp:localStorage.me||P[0]},D={},A={};
+COLS.forEach(c=>D[c]=[]);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0"),ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const md=s=>s?`${+s.slice(5,7)}/${+s.slice(8,10)}`:"";
+const dl=s=>s?Math.round((new Date(s+"T00:00")-new Date(ymd(new Date())+"T00:00"))/864e5):null;
+const rel=t=>{const m=(Date.now()-t)/6e4;return m<1?"今":m<60?`${m|0}分前`:m<1440?`${m/60|0}時間前`:`${m/1440|0}日前`};
+const short=s=>(s||"").length>18?s.slice(0,18)+"…":s||"";
+const byAt=(a,b)=>(a.ord||a.at||0)-(b.ord||b.at||0);
+const tc=(a,b)=>(a.due||"9")>(b.due||"9")?1:-1;
+const vid=id=>D.videos.find(v=>v.id===id);
+const empty=t=>`<div class=empty>${t}</div>`;
+const who=p=>`<span class="who ${p===P[0]?"iw":p===P[1]?"pk":"both"}">${esc(p||"")}</span>`;
+const DEF=d=>["企画","台本","撮影","編集","アニメーション","サムネイル","最終確認","投稿"].map((n,i)=>({n,d:!!d&&i===0}));
+const isDone=V=>(V.steps||[]).length>0&&V.steps.every(x=>x.d);
+
+/* ---------- データ操作 ---------- */
+const add=(c,v)=>addDoc(collection(db,c),{...v,by:S.me,at:Date.now()});
+const upd=(c,id,v)=>updateDoc(doc(db,c,id),{...v,editedBy:S.me,editedAt:Date.now()});
+const del=(c,id)=>deleteDoc(doc(db,c,id));
+const log=t=>addDoc(collection(db,"logs"),{who:S.me,t,at:Date.now()});
+
+/* ---------- 入力フォーム定義 ---------- */
+const OW=[...P,"2人"];
+const CF={
+ tasks:{nm:"タスク",f:[{k:"name",l:"タスク名"},{k:"owner",l:"担当者",t:"sel",o:OW},{k:"due",l:"期限",t:"date"},{k:"pri",l:"優先度",t:"sel",o:["高","中","低"]},{k:"video",l:"関連する動画",t:"vsel"},{k:"memo",l:"メモ",t:"area"}]},
+ ideas:{nm:"企画",f:[{k:"name",l:"企画名"},{k:"content",l:"企画内容",t:"area",r:4},{k:"why",l:"なぜ面白いと思うか",t:"area",r:2},{k:"merit",l:"視聴者が見るメリット",t:"area",r:2},{k:"target",l:"想定する視聴者"},{k:"point",l:"企画のポイント",t:"area",r:2},{k:"memo",l:"メモ",t:"area",r:2}]},
+ videos:{nm:"動画",f:[{k:"name",l:"動画名"},{k:"idea",l:"元になった企画",t:"isel"},{k:"owner",l:"担当者",t:"sel",o:OW},{k:"postDate",l:"投稿日（予定）",t:"date"},{k:"memo",l:"メモ",t:"area"}]},
+ titles:{nm:"タイトル案",f:[{k:"text",l:"タイトル",t:"area",r:2},{k:"memo",l:"メモ",t:"area",r:2}]},
+ thumbs:{nm:"サムネ案",free:1,f:[{k:"text",l:"入れる文字"},{k:"img",l:"サムネ画像",t:"img"},{k:"aim",l:"狙い",t:"area",r:2},{k:"memo",l:"メモ",t:"area",r:2}]},
+ boosts:{nm:"伸ばす案",f:[{k:"idea",l:"アイデア",t:"area",r:2},{k:"status",l:"状況",t:"sel",o:["案","実行中","実行済"]},{k:"result",l:"結果",t:"area"}]},
+ lines:{nm:"セリフ",f:[{k:"text",l:"セリフ",t:"area"},{k:"who",l:"話す人",t:"sel",o:P}]}
+};
+const STF=[{k:"postDate",l:"投稿日",t:"date"},{k:"views",l:"再生数",n:1},{k:"likes",l:"高評価",n:1},{k:"comments",l:"コメント数",n:1},{k:"ctr",l:"CTR（%）",n:1},{k:"avg",l:"平均視聴時間（例 3:20）"},{k:"ret",l:"視聴維持率（%）",n:1},{k:"subs",l:"登録者増加数",n:1},{k:"learned",l:"この動画から分かったこと",t:"area",r:4}];
+const RVF=[["good","良かったところ","g"],["bad","悪かったところ","n"],["next","次回改善すること","w"],["reaction","視聴者の反応"],["planning","企画について"],["editing","編集について"],["thumb","サムネについて"],["title","タイトルについて"]];
+const PRE=["タイトルを変更する","サムネを変更する","冒頭を短くする","最初に結論を出す","展開を増やす","テンポを速くする","視聴者が気になる情報を追加する"];
+const DEFS=c=>({tasks:{owner:S.me,pri:"中",video:S.vid||""},ideas:{status:"保留"},videos:{owner:"2人",steps:DEF()},titles:{video:S.vid,status:"保留"},thumbs:{video:S.vid,status:"保留"},boosts:{video:S.vid,status:"案"},lines:{video:S.vid,who:S.sp}}[c]);
+
+/* ---------- 入力シート ---------- */
+let SH=null,IMG="";
+const fld=(f,v)=>{v=v??"";let i;
+ if(f.t==="area")i=`<textarea name=${f.k} rows=${f.r||3}>${esc(v)}</textarea>`;
+ else if(["sel","vsel","isel"].includes(f.t)){const o=f.t==="vsel"?[["","なし"],...D.videos.map(x=>[x.id,x.name])]:f.t==="isel"?[["","なし"],...D.ideas.map(x=>[x.id,x.name])]:f.o.map(x=>[x,x]);i=`<select name=${f.k}>${o.map(([a,b])=>`<option value="${esc(a)}" ${a===v?"selected":""}>${esc(b)}</option>`).join("")}</select>`}
+ else if(f.t==="img")i=`<input type=file accept="image/*"><img id=pv src="${esc(v)}" ${v?"":"hidden"}>`;
+ else i=`<input name=${f.k} type="${f.t||"text"}" value="${esc(v)}" ${f.n?"inputmode=decimal":""}>`;
+ return `<label>${f.l}${i}</label>`};
+const shrink=file=>new Promise(r=>{const i=new Image();i.onload=()=>{const w=Math.min(720,i.width),h=i.height*w/i.width,c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(i,0,0,w,h);r(c.toDataURL("image/jpeg",.72))};i.src=URL.createObjectURL(file)});
+function sheet(title,fields,v,save,o={}){
+ const el=$("#sheet"),im=fields.find(f=>f.t==="img");IMG=im?v[im.k]||"":"";
+ el.innerHTML=`<div class=sh><div class=shh><b>${esc(title)}</b><button class=x data-a=close>✕</button></div><div class=shb>${fields.map(f=>fld(f,v[f.k])).join("")}</div><div class=shf>${o.del?`<button class="b dl" data-a=sdel>削除</button>`:""}${(o.extra||[]).map((x,i)=>`<button class=b data-a=sex data-i=${i}>${x[0]}</button>`).join("")}<button class="b pri" data-a=ssave>保存</button></div></div>`;
+ el.classList.add("on");SH={fields,save,o};
+ const f=el.querySelector("input[type=file]");if(f)f.onchange=async()=>{IMG=await shrink(f.files[0]);const p=$("#pv");p.src=IMG;p.hidden=false};
+}
+const closeSheet=()=>{$("#sheet").classList.remove("on");$("#sheet").innerHTML="";SH=null;sched()};
+$("#sheet").onclick=e=>{if(e.target.id==="sheet")closeSheet()};
+function openEdit(c,id,defs={}){
+ const C=CF[c],item=id?D[c].find(x=>x.id===id):null,k0=C.f[0].k,L=c==="lines"?()=>{}:log,extra=[];
+ if(item&&c==="lines")extra.push(["↑",()=>mv(item,-1)],["↓",()=>mv(item,1)]);
+ if(item&&c==="ideas")extra.push(["🎬動画にする",()=>mkVideo(item)]);
+ sheet((item?"編集：":"追加：")+C.nm,C.f,item||defs,async v=>{
+  if(item){await upd(c,id,v);L(`${C.nm}「${short(v[k0]||item[k0])}」を更新しました`)}
+  else{await add(c,{...defs,...v});L(`${C.nm}「${short(v[k0])}」を追加しました`)}
+ },{free:C.free,extra,del:item&&(()=>{if(confirm("削除しますか？")){del(c,id);if(c==="videos")S.vid=null;L(`${C.nm}「${short(item[k0])}」を削除しました`)}})});
+}
+function mv(it,d){const L=D.lines.filter(x=>x.video===it.video).sort(byAt),i=L.findIndex(x=>x.id===it.id),n=L[i+d];if(!n)return;const a=it.ord||it.at,b=n.ord||n.at;upd("lines",it.id,{ord:b});upd("lines",n.id,{ord:a})}
+async function mkVideo(i){await add("videos",{name:i.name,idea:i.id,owner:"2人",steps:DEF(1)});if(i.status!=="採用")upd("ideas",i.id,{status:"採用"});log(`企画「${short(i.name)}」から動画プロジェクトを作りました`);S.tab="videos";S.vid=null;render()}
+
+/* ---------- 部品 ---------- */
+const stBtns=(c,id,cur)=>`<div class=sts>${ST.map((s,i)=>`<button class="st ${cur===s?"on s"+i:""}" data-a=st data-c=${c} data-id=${id} data-v=${s}>${s}</button>`).join("")}</div>`;
+const chipsBar=(a,k)=>`<div class=subs>${a.map(([v,l])=>`<button class="${S[k]===v?"on":""}" data-a=flt data-k=${k} data-v=${v}>${l}</button>`).join("")}</div>`;
+const bar=V=>{const s=V.steps||[],d=s.filter(x=>x.d).length,c=s.find(x=>!x.d);return `<div class=bar><i style="width:${s.length?d/s.length*100:0}%"></i></div><div class=mu>${c?"いま："+esc(c.n):"🎉 全工程完了"}　${d}/${s.length}</div>`};
+const vcard=V=>`<div class=card data-a=open data-id=${V.id}><div class=row><b>${esc(V.name)}</b>${who(V.owner)}</div>${bar(V)}${V.postDate?`<div class=mu>投稿予定 ${md(V.postDate)}</div>`:""}</div>`;
+const PC={高:"ph",中:"pm",低:""};
+const tcard=t=>{const d=dl(t.due),late=!t.done&&d!==null&&d<0,v=vid(t.video);return `<div class="card task ${t.done?"done":""}"><button class=chk data-a=tog data-id=${t.id}>${t.done?"✓":""}</button><div class=tb data-a=e data-c=tasks data-id=${t.id}><div class=tt>${esc(t.name)}</div><div class=chips>${who(t.owner)}${t.due?`<span class="chip ${late?"late":d===0?"today":""}">${md(t.due)}${d===0?" 今日":late?" 超過":""}</span>`:""}<span class="chip ${PC[t.pri]||""}">優先度${esc(t.pri)}</span>${v?`<span class=chip>🎬${esc(v.name)}</span>`:""}</div></div></div>`};
+const icard=(i,full)=>{const n=ST.indexOf(i.status);return `<div class="card ${n===2?"s2c":""}"><div data-a=e data-c=ideas data-id=${i.id}><div class=row><b>${esc(i.name)}</b><span class="chip b${n}">${esc(i.status)}</span></div><div class="mu clip">${esc(i.content)}</div><div class=chips>${who(i.by)}<span class=chip>${md(ymd(new Date(i.at)))}</span></div></div>${full?stBtns("ideas",i.id,i.status):""}</div>`};
+
+/* ---------- 画面 ---------- */
+function home(){
+ const op=D.tasks.filter(t=>!t.done).sort(tc),nw=op.filter(t=>t.due&&dl(t.due)<=0),sn=op.filter(t=>t.due&&dl(t.due)>0&&dl(t.due)<=7);
+ const mk=D.videos.filter(v=>!isDone(v)),pd=D.videos.filter(isDone).sort((a,b)=>(b.editedAt||b.at)-(a.editedAt||a.at)).slice(0,3);
+ const ni=D.ideas.filter(i=>Date.now()-i.at<6048e5).sort((a,b)=>b.at-a.at).slice(0,3);
+ const rv=D.videos.filter(v=>v.rev&&v.rev.next).sort((a,b)=>(b.editedAt||0)-(a.editedAt||0))[0];
+ return `<h2>🔥 今日やること</h2>${nw.map(tcard).join("")||empty("今日が期限のタスクはなし 👍")}
+<h2>⏰ 期限が近い（7日以内）</h2>${sn.map(tcard).join("")||empty("なし")}
+<h2>🎬 制作中の動画</h2>${mk.map(vcard).join("")||empty("「動画」タブから作ろう")}
+<h2>💡 新しい企画</h2>${ni.map(i=>icard(i)).join("")||empty("この1週間の新企画はなし")}
+${rv?`<h2>🧠 前回の反省（次に活かす）</h2><div class=card><b>${esc(rv.name)}</b><div class=pre>${esc(rv.rev.next)}</div></div>`:""}
+<h2>✅ 最近投稿した動画</h2>${pd.map(vcard).join("")||empty("まだありません")}
+<h2>📝 最近の変更</h2><div class=card>${[...D.logs].sort((a,b)=>b.at-a.at).slice(0,8).map(l=>`<div class=lg>${who(l.who)} ${esc(l.t)} <span class=mu>${rel(l.at)}</span></div>`).join("")||"<span class=mu>まだありません</span>"}</div>
+<p class=c><button class=mu data-a=out>ログアウト</button></p>`}
+function tasks(){const f=S.tf,L=D.tasks.filter(t=>f==="done"?t.done:f==="mine"?!t.done&&(t.owner===S.me||t.owner==="2人"):!t.done).sort(tc);
+ return chipsBar([["open","未完了"],["mine","自分"],["done","完了"]],"tf")+(L.map(tcard).join("")||empty("タスクなし 🎉"))}
+function ideas(){const L=D.ideas.filter(i=>S.fi==="all"||i.status===S.fi).sort((a,b)=>b.at-a.at);
+ return chipsBar([["all","すべて"],...ST.map(s=>[s,s])],"fi")+(L.map(i=>icard(i,1)).join("")||empty("＋で企画を追加"))}
+function videos(){const a=D.videos.filter(v=>!isDone(v)),b=D.videos.filter(isDone);
+ return `<h2>制作中</h2>${a.map(vcard).join("")||empty("＋で動画プロジェクトを作成")}${b.length?`<h2>投稿済み</h2>${b.map(vcard).join("")}`:""}`}
+const SUBS=[["prog","進行"],["script","台本"],["titles","タイトル"],["thumbs","サムネ"],["boost","伸ばす"],["stats","データ"],["rev","反省"]];
+function detail(V){return `<div class=card>${bar(V)}</div><div class=subs>${SUBS.map(([k,l])=>`<button class="${S.sub===k?"on":""}" data-a=sub data-v=${k}>${l}</button>`).join("")}</div>${SB[S.sub](V)}`}
+const SB={
+ prog:V=>{const i=D.ideas.find(x=>x.id===V.idea),T=D.tasks.filter(t=>t.video===V.id&&!t.done).sort(tc);
+  return `${(V.steps||[]).map((s,n)=>`<button class="step ${s.d?"on":""}" data-a=step data-i=${n}><span class=ck>${s.d?"✓":n+1}</span>${esc(s.n)}</button>`).join("")}
+<div class=row style="margin:6px 0 14px"><button class=sm data-a=esteps>工程を編集</button><button class=sm data-a=einfo>動画情報を編集</button></div>
+<div class=card><div class=mu>担当</div>${who(V.owner)}${V.postDate?`<div class=mu style="margin-top:8px">投稿予定 ${md(V.postDate)}</div>`:""}${i?`<div class=mu style="margin-top:8px">元企画：${esc(i.name)}</div>`:""}${V.memo?`<div class=pre>${esc(V.memo)}</div>`:""}</div>
+<h2>この動画のタスク（＋で追加）</h2>${T.map(tcard).join("")||empty("未完了タスクなし")}`},
+ script:V=>{const L=D.lines.filter(x=>x.video===V.id).sort(byAt);
+  return L.map(l=>`<div class="ln ${l.who===P[0]?"l":"r"}"><div class=bub data-a=e data-c=lines data-id=${l.id}><small>${esc(l.who)}</small>${esc(l.text)}</div></div>`).join("")||empty("下の入力欄からセリフを追加。左ボタンで話す人を切り替え")},
+ titles:V=>{const L=D.titles.filter(x=>x.video===V.id).sort(byAt);
+  return L.map(x=>`<div class="card ${x.status==="採用"?"adopt":x.status==="ボツ"?"s2c":""}"><div data-a=e data-c=titles data-id=${x.id}>${x.status==="採用"?"<div class=star>★ 採用タイトル</div>":""}<div class=big>${esc(x.text)}</div>${x.memo?`<div class=mu>${esc(x.memo)}</div>`:""}<div class=mu>${esc(x.by)}</div></div>${stBtns("titles",x.id,x.status)}</div>`).join("")||empty("＋でタイトル案を追加")},
+ thumbs:V=>{const L=D.thumbs.filter(x=>x.video===V.id).sort(byAt);
+  return L.map(x=>`<div class="card th ${x.status==="採用"?"adopt":x.status==="ボツ"?"s2c":""}"><div data-a=e data-c=thumbs data-id=${x.id}>${x.status==="採用"?"<div class=star>★ 採用サムネ</div>":""}${x.img?`<img src="${x.img}">`:""}<div class=big>${esc(x.text)}</div>${x.aim?`<div class=mu>狙い：${esc(x.aim)}</div>`:""}${x.memo?`<div class=mu>${esc(x.memo)}</div>`:""}</div>${stBtns("thumbs",x.id,x.status)}</div>`).join("")||empty("＋でサムネ案を追加（画像もOK）")},
+ boost:V=>{const L=D.boosts.filter(x=>x.video===V.id).sort(byAt);
+  return `<div class=subs>${PRE.map((p,i)=>`<button data-a=pre data-i=${i}>＋${p}</button>`).join("")}</div>`+(L.map(x=>`<div class="card bs" data-a=e data-c=boosts data-id=${x.id}><small>💡 アイデア</small><div class=big>${esc(x.idea)}</div><small>▶ 実行</small><span class="chip ${x.status==="実行済"?"b0":x.status==="実行中"?"b1":""}">${esc(x.status)}</span><small>📊 結果</small><div class=pre>${esc(x.result||"まだ結果なし")}</div></div>`).join("")||empty("伸ばすアイデアを出そう。上のボタンで追加できます"))},
+ stats:V=>{const s=V.stats||{},T=[["投稿日",V.postDate?md(V.postDate):""],["再生数",s.views],["高評価",s.likes],["コメント",s.comments],["CTR",s.ctr&&s.ctr+"%"],["平均視聴時間",s.avg],["視聴維持率",s.ret&&s.ret+"%"],["登録者増加",s.subs]];
+  return `<div class=card><div class=row><b>📊 投稿後データ</b><button class=sm data-a=estats>入力・編集</button></div><div class=grid>${T.map(([l,v])=>`<div class=stat><b>${esc(v||"–")}</b><span>${l}</span></div>`).join("")}</div></div><div class=card><b>🔎 この動画から分かったこと</b><div class=pre>${esc(s.learned||"未入力")}</div></div>`},
+ rev:V=>{const r=V.rev||{};return `<div class=card><div class=row><b>🧠 反省</b><button class=sm data-a=erev>入力・編集</button></div>${RVF.map(([k,l,c])=>`<div class="blk ${c||""}"><small>${l}</small><div class=pre>${esc(r[k]||"未入力")}</div></div>`).join("")}</div>`}
+};
+const head=V=>(V?`<button class=bk data-a=back>‹</button><b class=ht>${esc(V.name)}</b>`:`<b class=ht>🎬 ${{home:"ピカガブ",tasks:"やること",ideas:"企画案",videos:"動画"}[S.tab]}</b>`)+`<button class="me ${S.me===P[0]?"iw":"pk"}" data-a=me>${S.me} ⇄</button>`;
+const compose=()=>`<div><button class="spk ${S.sp===P[0]?"iw":"pk"}" data-a=spk>${S.sp}</button><textarea id=lt rows=1 placeholder="セリフを入力"></textarea><button class=snd data-a=send>追加</button></div>`;
+
+function render(){
+ let V=S.vid&&vid(S.vid);if(S.vid&&!V)S.vid=null;
+ const det=S.tab==="videos"&&V;
+ $("#hd").innerHTML=head(det&&V);
+ $("#app").innerHTML=S.tab==="home"?home():S.tab==="tasks"?tasks():S.tab==="ideas"?ideas():det?detail(V):videos();
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab));
+ const sc=det&&S.sub==="script",c=$("#comp");
+ if(sc&&!c.innerHTML)c.innerHTML=compose();if(!sc)c.innerHTML="";
+ $("#fab").hidden=S.tab==="home"?false:!!(det&&["script","stats","rev"].includes(S.sub));
+ if(S.sb){scrollTo(0,document.body.scrollHeight);S.sb=0}
+}
+let pend=0,tm;
+function sched(){const a=document.activeElement;if($("#app").contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)){pend=1;return}cancelAnimationFrame(tm);tm=requestAnimationFrame(render)}
+document.addEventListener("focusout",()=>{if(pend){pend=0;setTimeout(sched,50)}});
+
+/* ---------- 操作 ---------- */
+A.tab=d=>{S.tab=d.v;S.vid=null;render();scrollTo(0,0)};
+A.open=d=>{S.vid=d.id;S.sub="prog";S.tab="videos";render();scrollTo(0,0)};
+A.back=()=>{S.vid=null;render()};
+A.sub=d=>{S.sub=d.v;render();scrollTo(0,0)};
+A.flt=d=>{S[d.k]=d.v;render()};
+A.me=()=>{S.me=S.me===P[0]?P[1]:P[0];S.sp=S.me;localStorage.me=S.me;render()};
+A.out=()=>signOut(auth);
+A.e=d=>openEdit(d.c,d.id);
+A.fab=()=>{const c=S.tab==="home"||S.tab==="tasks"?"tasks":S.tab==="ideas"?"ideas":S.vid?{prog:"tasks",titles:"titles",thumbs:"thumbs",boost:"boosts"}[S.sub]:"videos";openEdit(c,null,DEFS(c))};
+A.tog=d=>{const t=D.tasks.find(x=>x.id===d.id);upd("tasks",t.id,{done:!t.done});log(`タスク「${short(t.name)}」を${t.done?"未完了に戻しました":"完了にしました"}`)};
+A.st=d=>{const x=D[d.c].find(y=>y.id===d.id),nm=CF[d.c].nm,k=CF[d.c].f[0].k;upd(d.c,d.id,{status:d.v});log(`${nm}「${short(x[k]||"画像")}」を「${d.v}」にしました`)};
+A.step=d=>{const V=vid(S.vid),s=V.steps.map((x,i)=>i==d.i?{...x,d:!x.d}:x);upd("videos",V.id,{steps:s});log(`「${short(V.name)}」の工程「${s[d.i].n}」を${s[d.i].d?"完了":"未完了に戻しました"}`)};
+A.esteps=()=>{const V=vid(S.vid);sheet("工程を編集",[{k:"t",l:"1行に1工程（追加・削除・並べ替えOK）",t:"area",r:10}],{t:V.steps.map(x=>x.n).join("\n")},v=>{const n=v.t.split("\n").map(s=>s.trim()).filter(Boolean);upd("videos",V.id,{steps:n.map(x=>({n:x,d:!!(V.steps.find(y=>y.n===x)||{}).d}))});log(`「${short(V.name)}」の工程を変更しました`)})};
+A.einfo=()=>openEdit("videos",S.vid);
+A.estats=()=>{const V=vid(S.vid);sheet("投稿後データ",STF,{...V.stats,postDate:V.postDate},v=>{const{postDate,...r}=v;upd("videos",V.id,{stats:r,postDate});log(`「${short(V.name)}」の投稿後データを更新しました`)},{free:1})};
+A.erev=()=>{const V=vid(S.vid);sheet("反省",RVF.map(([k,l])=>({k,l,t:"area",r:3})),V.rev||{},v=>{upd("videos",V.id,{rev:v});log(`「${short(V.name)}」の反省を更新しました`)},{free:1})};
+A.pre=d=>{add("boosts",{video:S.vid,status:"案",idea:PRE[d.i]});log(`「${short(vid(S.vid).name)}」に伸ばす案「${PRE[d.i]}」を追加しました`)};
+A.spk=()=>{S.sp=S.sp===P[0]?P[1]:P[0];const b=$(".spk");b.textContent=S.sp;b.className="spk "+(S.sp===P[0]?"iw":"pk")};
+A.send=async()=>{const t=$("#lt").value.trim();if(!t)return;$("#lt").value="";S.sb=1;await add("lines",{video:S.vid,who:S.sp,text:t,ord:Date.now()});
+ if(Date.now()-(S.sl||0)>6e5){S.sl=Date.now();log(`「${short(vid(S.vid).name)}」の台本を更新しました`)}};
+A.close=closeSheet;
+A.sex=d=>{const f=SH.o.extra[d.i][1];closeSheet();f()};
+A.sdel=()=>{SH.o.del();closeSheet()};
+A.ssave=()=>{const v={};SH.fields.forEach(f=>{v[f.k]=f.t==="img"?IMG:$("#sheet [name="+f.k+"]").value.trim()});
+ const f0=SH.fields[0];if(!SH.o.free&&!v[f0.k]){alert("入力してね");return}
+ SH.save(v);closeSheet()};
+document.addEventListener("click",e=>{const a=e.target.closest("[data-a]");if(a&&A[a.dataset.a])A[a.dataset.a](a.dataset,a)});
+
+/* ---------- ログイン・同期 ---------- */
+$("#lf").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";try{await signInWithEmailAndPassword(auth,$("#em").value.trim(),$("#pw").value)}catch(x){$("#le").textContent="ログインできません。メールとパスワードを確認してください"}};
+let unsubs=[];
+onAuthStateChanged(auth,u=>{
+ $("#login").hidden=!!u;unsubs.forEach(f=>f());unsubs=[];
+ if(!u)return;
+ if(!localStorage.me){S.me=confirm("あなたはイワガブ？（キャンセル＝ピカトモ）")?P[0]:P[1];S.sp=S.me;localStorage.me=S.me}
+ COLS.forEach(c=>unsubs.push(onSnapshot(collection(db,c),s=>{D[c]=s.docs.map(d=>({id:d.id,...d.data()}));sched()},e=>console.error(c,e))));
+ render();
+});
+</script>
+</body></html>
