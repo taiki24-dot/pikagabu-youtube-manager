@@ -82,7 +82,7 @@ h2{font-size:13px;color:var(--mu);margin:20px 2px 8px}
 .shb img{width:100%;border-radius:10px;margin-top:8px}
 .shf{display:flex;gap:8px;padding:10px 16px}
 #login{position:fixed;inset:0;background:var(--bg);z-index:30;display:flex;align-items:center;justify-content:center;padding:24px}
-#login form{width:100%;max-width:340px;display:grid;gap:12px;text-align:center}
+#login .sel{width:100%;max-width:340px;display:grid;gap:14px;text-align:center}.pick{padding:20px;font-size:20px;font-weight:700;border-radius:16px;border:2px solid;background:var(--c1)}.pick.iw{color:var(--iw)}.pick.pk{color:var(--pk)}
 #login h1{margin:0;font-size:30px}#login input{padding:13px;border-radius:12px;border:1px solid var(--bd);background:var(--c1);color:var(--tx);font-size:16px}
 #le{color:var(--red);font-size:13px;min-height:18px}
 </style></head>
@@ -91,18 +91,17 @@ h2{font-size:13px;color:var(--mu);margin:20px 2px 8px}
 <button id="fab" data-a="fab" hidden>＋</button>
 <nav id="nav"><button data-a="tab" data-v="home"><span>🏠</span>ホーム</button><button data-a="tab" data-v="tasks"><span>✅</span>やること</button><button data-a="tab" data-v="ideas"><span>💡</span>企画</button><button data-a="tab" data-v="videos"><span>🎬</span>動画</button></nav>
 <div id="sheet"></div>
-<div id="login"><form id="lf"><h1>🎬 ピカガブ</h1><input id="em" type="email" placeholder="メールアドレス" autocomplete="username"><input id="pw" type="password" placeholder="パスワード" autocomplete="current-password"><button class="b pri">ログイン</button><div id="le"></div></form></div>
+<div id="login"><div class="sel"><h1>🎬 ピカガブ</h1><p>どっちで使う？</p><button class="pick iw" data-a="pick" data-v="イワガブ">イワガブ</button><button class="pick pk" data-a="pick" data-v="ピカトモ">ピカトモ</button></div></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import{getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ▼▼ ここにFirebaseの設定を貼る ▼▼ */
 const CFG={apiKey:"AIzaSyCYNmOv5t0BHFUF1gkzrjkDAiyYSBRWjUc",authDomain:"pikagabu-77628.firebaseapp.com",projectId:"pikagabu-77628",appId:"1:332516984224:web:01c00922192c2f55d6d0c5"};
 /* ▲▲ ここまで ▲▲ */
 
-const app=initializeApp(CFG),auth=getAuth(app),db=getFirestore(app);
+const app=initializeApp(CFG),db=getFirestore(app);
 const P=["イワガブ","ピカトモ"],ST=["採用","保留","ボツ"],COLS=["tasks","ideas","videos","titles","thumbs","boosts","lines","logs"];
 const S={tab:"home",vid:null,sub:"prog",tf:"open",fi:"all",me:localStorage.me||P[0],sp:localStorage.me||P[0]},D={},A={};
 COLS.forEach(c=>D[c]=[]);
@@ -194,7 +193,7 @@ function home(){
 ${rv?`<h2>🧠 前回の反省（次に活かす）</h2><div class=card><b>${esc(rv.name)}</b><div class=pre>${esc(rv.rev.next)}</div></div>`:""}
 <h2>✅ 最近投稿した動画</h2>${pd.map(vcard).join("")||empty("まだありません")}
 <h2>📝 最近の変更</h2><div class=card>${[...D.logs].sort((a,b)=>b.at-a.at).slice(0,8).map(l=>`<div class=lg>${who(l.who)} ${esc(l.t)} <span class=mu>${rel(l.at)}</span></div>`).join("")||"<span class=mu>まだありません</span>"}</div>
-<p class=c><button class=mu data-a=out>ログアウト</button></p>`}
+<p class=c><button class=mu data-a=out>アカウント切替</button></p>`}
 function tasks(){const f=S.tf,L=D.tasks.filter(t=>f==="done"?t.done:f==="mine"?!t.done&&(t.owner===S.me||t.owner==="2人"):!t.done).sort(tc);
  return chipsBar([["open","未完了"],["mine","自分"],["done","完了"]],"tf")+(L.map(tcard).join("")||empty("タスクなし 🎉"))}
 function ideas(){const L=D.ideas.filter(i=>S.fi==="all"||i.status===S.fi).sort((a,b)=>b.at-a.at);
@@ -246,7 +245,7 @@ A.back=()=>{S.vid=null;render()};
 A.sub=d=>{S.sub=d.v;render();scrollTo(0,0)};
 A.flt=d=>{S[d.k]=d.v;render()};
 A.me=()=>{S.me=S.me===P[0]?P[1]:P[0];S.sp=S.me;localStorage.me=S.me;render()};
-A.out=()=>signOut(auth);
+A.out=()=>{$("#login").hidden=false};A.pick=d=>{S.me=S.sp=localStorage.me=d.v;$("#login").hidden=true;render()};
 A.e=d=>openEdit(d.c,d.id);
 A.fab=()=>{const c=S.tab==="home"||S.tab==="tasks"?"tasks":S.tab==="ideas"?"ideas":S.vid?{prog:"tasks",titles:"titles",thumbs:"thumbs",boost:"boosts"}[S.sub]:"videos";openEdit(c,null,DEFS(c))};
 A.tog=d=>{const t=D.tasks.find(x=>x.id===d.id);upd("tasks",t.id,{done:!t.done});log(`タスク「${short(t.name)}」を${t.done?"未完了に戻しました":"完了にしました"}`)};
@@ -268,15 +267,9 @@ A.ssave=()=>{const v={};SH.fields.forEach(f=>{v[f.k]=f.t==="img"?IMG:$("#sheet [
  SH.save(v);closeSheet()};
 document.addEventListener("click",e=>{const a=e.target.closest("[data-a]");if(a&&A[a.dataset.a])A[a.dataset.a](a.dataset,a)});
 
-/* ---------- ログイン・同期 ---------- */
-$("#lf").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";try{await signInWithEmailAndPassword(auth,$("#em").value.trim(),$("#pw").value)}catch(x){$("#le").textContent="ログインできません。メールとパスワードを確認してください"}};
-let unsubs=[];
-onAuthStateChanged(auth,u=>{
- $("#login").hidden=!!u;unsubs.forEach(f=>f());unsubs=[];
- if(!u)return;
- if(!localStorage.me){S.me=confirm("あなたはイワガブ？（キャンセル＝ピカトモ）")?P[0]:P[1];S.sp=S.me;localStorage.me=S.me}
- COLS.forEach(c=>unsubs.push(onSnapshot(collection(db,c),s=>{D[c]=s.docs.map(d=>({id:d.id,...d.data()}));sched()},e=>console.error(c,e))));
- render();
-});
+/* ---------- 同期 ---------- */
+COLS.forEach(c=>onSnapshot(collection(db,c),s=>{D[c]=s.docs.map(d=>({id:d.id,...d.data()}));sched()},e=>console.error(c,e)));
+$("#login").hidden=!!localStorage.me;
+render();
 </script>
 </body></html>
